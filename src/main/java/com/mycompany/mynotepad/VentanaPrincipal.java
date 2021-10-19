@@ -3,8 +3,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package com.mycompany.mynotepad;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import javax.swing.JFileChooser;
 import java.io.File;  
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -22,6 +27,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
      * Creates new form VentanaPrincipal
      */
     File selectedFile = null;
+    String archivoCompleto = "";
+    String archivoGuardado = null;
+    boolean firstTime = true;
     public VentanaPrincipal() {
         initComponents();
     }
@@ -39,14 +47,13 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         selectedFileSizeField = new javax.swing.JLabel();
         selectedFilePathField = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        textArea = new javax.swing.JTextArea();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         abrir = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
-        jMenu3 = new javax.swing.JMenu();
+        save = new javax.swing.JMenuItem();
+        exit = new javax.swing.JMenuItem();
+        format = new javax.swing.JMenu();
         acercaDe = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -70,9 +77,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        textArea.setColumns(20);
+        textArea.setRows(5);
+        jScrollPane1.setViewportView(textArea);
 
         jMenu1.setText("File");
 
@@ -84,19 +91,26 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         });
         jMenu1.add(abrir);
 
-        jMenuItem2.setText("Guardar");
-        jMenu1.add(jMenuItem2);
+        save.setText("Guardar");
+        save.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveActionPerformed(evt);
+            }
+        });
+        jMenu1.add(save);
 
-        jMenuItem3.setText("Salir");
-        jMenu1.add(jMenuItem3);
+        exit.setText("Salir");
+        exit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exitActionPerformed(evt);
+            }
+        });
+        jMenu1.add(exit);
 
         jMenuBar1.add(jMenu1);
 
-        jMenu2.setText("Edit");
-        jMenuBar1.add(jMenu2);
-
-        jMenu3.setText("Format");
-        jMenuBar1.add(jMenu3);
+        format.setText("Format");
+        jMenuBar1.add(format);
 
         acercaDe.setText("Acerca de ..");
         acercaDe.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -127,6 +141,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void abrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abrirActionPerformed
+        int isOpened = 0;
+        
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
         int result = fileChooser.showOpenDialog(null);
@@ -136,13 +152,70 @@ public class VentanaPrincipal extends javax.swing.JFrame {
          this.selectedFile = selectedFile;
          selectedFileSizeField.setText("| Tamaño: "+String.valueOf(this.selectedFile.length()/1024)+" KB");
          selectedFilePathField.setText("Ubicación: "+selectedFile.getAbsolutePath());
+         if(this.archivoCompleto.length() > 0){
+         isOpened = JOptionPane.showConfirmDialog(null, "Perderá los cambios, ¿desea continuar?", "ATENSION", JOptionPane.YES_NO_OPTION);
+         }
+         if(firstTime || (this.archivoGuardado == this.archivoCompleto)){
+            copyInVar(selectedFile);
+            textArea.setText(archivoCompleto);
+         }else if(isOpened == 0){
+            textArea.setText("");
+            this.archivoCompleto = "";
+            copyInVar(selectedFile);
+            textArea.setText(archivoCompleto);
+         } 
         }
+        this.firstTime = false;
     }//GEN-LAST:event_abrirActionPerformed
 
     private void acercaDeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_acercaDeMouseClicked
         JOptionPane.showMessageDialog(null, "Hecho por il putisimo amo er bixo serresiete");
     }//GEN-LAST:event_acercaDeMouseClicked
 
+    private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
+        JFileChooser saver = new JFileChooser("./");
+        
+        int returnVal = saver.showSaveDialog(this);
+        File file = saver.getSelectedFile();
+        BufferedWriter writer = null;
+        if (returnVal == JFileChooser.APPROVE_OPTION)
+        {
+            try
+            {
+            writer = new BufferedWriter( new FileWriter(file+".txt"));
+            writer.write( textArea.getText());
+            writer.close( );
+            JOptionPane.showMessageDialog(this, "The Message was Saved Successfully!",
+                        "Success!", JOptionPane.INFORMATION_MESSAGE);
+            this.archivoGuardado = this.archivoCompleto;
+            }
+            catch (IOException e)
+            {
+            JOptionPane.showMessageDialog(this, "The Text could not be Saved!",
+                        "Error!", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_saveActionPerformed
+
+    private void exitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitActionPerformed
+        int isOpened = 0;
+        if(this.archivoCompleto.length() > 0){
+            isOpened = JOptionPane.showConfirmDialog(null, "Perderá los cambios, ¿desea continuar?", "ATENSION", JOptionPane.YES_NO_OPTION);
+        }
+        if (isOpened == 0) System.exit(0);
+    }//GEN-LAST:event_exitActionPerformed
+    private void copyInVar(File fil){
+        String line;
+      try(BufferedReader bf = new BufferedReader(new FileReader (fil))){
+          while((line = bf.readLine()) != null){
+          archivoCompleto+=line+"\n";
+          }
+      } catch (FileNotFoundException ex) { 
+            Logger.getLogger(VentanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(VentanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+    }
     /**
      * @param args the command line arguments
      */
@@ -177,20 +250,20 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             }
         });
     }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem abrir;
     private javax.swing.JMenu acercaDe;
+    private javax.swing.JMenuItem exit;
+    private javax.swing.JMenu format;
     private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JMenuItem save;
     private javax.swing.JLabel selectedFilePathField;
     private javax.swing.JLabel selectedFileSizeField;
+    private javax.swing.JTextArea textArea;
     // End of variables declaration//GEN-END:variables
 }
