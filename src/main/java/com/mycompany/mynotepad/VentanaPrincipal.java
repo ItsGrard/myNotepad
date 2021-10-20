@@ -3,6 +3,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package com.mycompany.mynotepad;
+import java.awt.Color;
+import java.awt.Font;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import javax.swing.JFileChooser;
@@ -29,6 +31,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     File selectedFile = null;
     String archivoCompleto = "";
     String archivoGuardado = null;
+    int textSize = 16;
     boolean firstTime = true;
     public VentanaPrincipal() {
         initComponents();
@@ -46,6 +49,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         selectedFileSizeField = new javax.swing.JLabel();
         selectedFilePathField = new javax.swing.JLabel();
+        textSizeText = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         textArea = new javax.swing.JTextArea();
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -54,6 +58,13 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         save = new javax.swing.JMenuItem();
         exit = new javax.swing.JMenuItem();
         format = new javax.swing.JMenu();
+        jMenu2 = new javax.swing.JMenu();
+        Rojo = new javax.swing.JMenuItem();
+        Verde = new javax.swing.JMenuItem();
+        Azul = new javax.swing.JMenuItem();
+        Negro = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
         acercaDe = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -64,15 +75,20 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(selectedFilePathField, javax.swing.GroupLayout.PREFERRED_SIZE, 501, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, Short.MAX_VALUE)
+                .addComponent(selectedFilePathField, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(textSizeText, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 123, Short.MAX_VALUE)
                 .addComponent(selectedFileSizeField, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(selectedFilePathField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 11, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(textSizeText, javax.swing.GroupLayout.PREFERRED_SIZE, 11, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(selectedFilePathField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(selectedFileSizeField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -110,6 +126,59 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jMenuBar1.add(jMenu1);
 
         format.setText("Format");
+
+        jMenu2.setText("Color");
+
+        Rojo.setText("Rojo");
+        Rojo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                RojoActionPerformed(evt);
+            }
+        });
+        jMenu2.add(Rojo);
+
+        Verde.setText("Verde");
+        Verde.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                VerdeActionPerformed(evt);
+            }
+        });
+        jMenu2.add(Verde);
+
+        Azul.setText("Azul");
+        Azul.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AzulActionPerformed(evt);
+            }
+        });
+        jMenu2.add(Azul);
+
+        Negro.setText("Negro");
+        Negro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                NegroActionPerformed(evt);
+            }
+        });
+        jMenu2.add(Negro);
+
+        format.add(jMenu2);
+
+        jMenuItem1.setText("Aumentar");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        format.add(jMenuItem1);
+
+        jMenuItem2.setText("Reducir");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        format.add(jMenuItem2);
+
         jMenuBar1.add(format);
 
         acercaDe.setText("Acerca de ..");
@@ -132,8 +201,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 322, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 321, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -142,7 +211,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
     private void abrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abrirActionPerformed
         int isOpened = 0;
-        
+        textSizeText.setText("Fuente: " + this.textSize);
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
         int result = fileChooser.showOpenDialog(null);
@@ -204,6 +273,44 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         }
         if (isOpened == 0) System.exit(0);
     }//GEN-LAST:event_exitActionPerformed
+
+    private void VerdeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VerdeActionPerformed
+        Color color = new Color(0, 255, 0);
+        textArea.setForeground(color);
+    }//GEN-LAST:event_VerdeActionPerformed
+
+    private void AzulActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AzulActionPerformed
+        Color color = new Color(0, 0, 255);
+        textArea.setForeground(color);
+    }//GEN-LAST:event_AzulActionPerformed
+
+    private void RojoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RojoActionPerformed
+        Color color = new Color(255, 0, 0);
+        textArea.setForeground(color);
+    }//GEN-LAST:event_RojoActionPerformed
+
+    private void NegroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NegroActionPerformed
+        Color color = new Color(0, 0, 0);
+        textArea.setForeground(color);
+    }//GEN-LAST:event_NegroActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+               System.out.println("ROLF");
+        this.textSize+=1;
+        Font newTextFieldFont = new Font(textArea.getFont().getName(),
+            textArea.getFont().getStyle(), this.textSize);
+        textArea.setFont(newTextFieldFont);
+        textSizeText.setText("Fuente: " + this.textSize);
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+                       System.out.println("ROLF");
+        this.textSize-=1;
+        Font newTextFieldFont = new Font(textArea.getFont().getName(),
+            textArea.getFont().getStyle(), this.textSize);
+        textArea.setFont(newTextFieldFont);
+        textSizeText.setText("Fuente: " + this.textSize);
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
     private void copyInVar(File fil){
         String line;
       try(BufferedReader bf = new BufferedReader(new FileReader (fil))){
@@ -253,17 +360,25 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem Azul;
+    private javax.swing.JMenuItem Negro;
+    private javax.swing.JMenuItem Rojo;
+    private javax.swing.JMenuItem Verde;
     private javax.swing.JMenuItem abrir;
     private javax.swing.JMenu acercaDe;
     private javax.swing.JMenuItem exit;
     private javax.swing.JMenu format;
     private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JMenuItem save;
     private javax.swing.JLabel selectedFilePathField;
     private javax.swing.JLabel selectedFileSizeField;
     private javax.swing.JTextArea textArea;
+    private javax.swing.JLabel textSizeText;
     // End of variables declaration//GEN-END:variables
 }
